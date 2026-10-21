@@ -15,14 +15,14 @@ namespace SQLRepository.LibraryRepository
         /// </summary>
         /// <param name="dbConnection"></param>
         /// <param name="dbConnectionStringBuilder"></param>
-        void DbConnection(DbConnection dbConnection, DbConnectionStringBuilder dbConnectionStringBuilder);
+        void DbConnection();
         /// <summary>
         /// Ассинхронная версия ВbConnection
         /// </summary>
         /// <param name="dbConnection"></param>
         /// <param name="dbConnectionStringBuilder"></param>
         /// <returns></returns>
-        Task DbConnectionAsync(DbConnection dbConnection, DbConnectionStringBuilder dbConnectionStringBuilder);
+        Task DbConnectionAsync();
         /// <summary>
         /// Метод выполняет функцию которая возвращает число
         /// </summary>

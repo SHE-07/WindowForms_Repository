@@ -35,16 +35,22 @@ namespace SQLRepository.LibraryRepository.PostgreSQL
         /// <param name="dbConnection"></param>
         /// <param name="dbConnectionStringBuilder"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public void DbConnection(DbConnection dbConnection, DbConnectionStringBuilder dbConnectionStringBuilder)
+        public void DbConnection()
         {
-            if (dbConnection == null)
+            if (this.connection == null)
             {
-                EventWithException.Invoke(this, new ArgumentNullException(" DbConnection dbConnection - ссылка на объект пустая !"));
-                throw new ArgumentNullException(" DbConnection dbConnection - ссылка на объект пустая !");
+                EventWithException.Invoke(this, new ArgumentNullException("connection - ссылка на объект пустая !"));
+                throw new ArgumentNullException("connection свойство пустое  !");
             }
-            dbConnection.ConnectionString = dbConnectionStringBuilder.ConnectionString;
-            dbConnection.Open();
-            this.connection = (NpgsqlConnection)dbConnection;
+            this.connection.ConnectionString = this.PostgreSQLStringBiulder.ConnectionString;
+            try {
+                this.connection.Open();
+            }
+            catch (Exception ex)
+            {
+                this.EventWithException.Invoke(this, ex);
+                throw ex;
+            }
         }
         /// <summary>
         /// Асинхронное открытие соединения
@@ -53,16 +59,23 @@ namespace SQLRepository.LibraryRepository.PostgreSQL
         /// <param name="dbConnectionStringBuilder"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public async Task DbConnectionAsync(DbConnection dbConnection , DbConnectionStringBuilder dbConnectionStringBuilder)
+        public async Task DbConnectionAsync()
         {
-            /* if (dbConnection == null)
-             {
-                 EventWithException.Invoke(this, new ArgumentNullException(" DbConnection dbConnection - ссылка на объект пустая !"));
-                 throw new ArgumentNullException(" DbConnection dbConnection - ссылка на объект пустая !");
-             }*/
-            dbConnection = new NpgsqlConnection();
-            dbConnection.ConnectionString = dbConnectionStringBuilder.ConnectionString;
-            await dbConnection.OpenAsync();
+            if (this.connection == null)
+            {
+                EventWithException.Invoke(this, new ArgumentNullException("connection - ссылка на объект пустая !"));
+                throw new ArgumentNullException("connection свойство пустое  !");
+            }
+            this.connection.ConnectionString = this.PostgreSQLStringBiulder.ConnectionString;
+            try
+            {
+                await  this.connection.OpenAsync();
+            }
+            catch (Exception ex)
+            {
+                this.EventWithException.Invoke(this, ex);
+                throw ex;
+            }
         }
         /// <summary>
         /// Метод по названию функции выполняет запро и воозвращает число 
@@ -133,7 +146,7 @@ namespace SQLRepository.LibraryRepository.PostgreSQL
 
         public void RequestExcetionForTable(ref DataTable dt, string nameTableInDB, string[] parametrs)
         {
-            throw new NotImplementedException();
+            
         }
 
         /// <summary>
